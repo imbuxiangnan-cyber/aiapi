@@ -45,21 +45,34 @@ AI API 代理服务器，将 GitHub Copilot、OpenCode Zen、Google Antigravity�
 
 ## 快速开始
 
-### 安装
+### 方式一：npm/npx（推荐）
 
 ```bash
+# npx 直接运行（无需安装）
+npx aiapi-server start
+npx aiapi-server start --kiro
+npx aiapi-server start --droids
+
+# 或全局安装
+npm install -g aiapi-server
+aiapi start
+aiapi start --kiro
+```
+
+### 方式二：源码运行
+
+```bash
+# 克隆项目
+git clone https://github.com/imbuxiangnan-cyber/aiapi.git
+cd aiapi
+
+# 安装依赖
 bun install
-```
 
-### 开发模式
-
-```bash
+# 开发模式
 bun run dev
-```
 
-### 生产环境启动
-
-```bash
+# 生产环境
 bun run start
 ```
 
