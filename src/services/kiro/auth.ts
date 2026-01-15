@@ -38,7 +38,7 @@ export interface KiroAuthState {
   tokens: Map<number, KiroTokenInfo>
 }
 
-let authState: KiroAuthState | null = null
+// Auth state is managed by token-manager.ts
 
 export function getKiroAuthPath(): string {
   return join(PATHS.DATA_DIR, "kiro-auth.json")
@@ -46,7 +46,7 @@ export function getKiroAuthPath(): string {
 
 export async function loadKiroAuth(): Promise<Array<KiroAuthConfig> | null> {
   try {
-    const content = await readFile(getKiroAuthPath(), "utf-8")
+    const content = await readFile(getKiroAuthPath(), "utf8")
     const configs = JSON.parse(content) as Array<KiroAuthConfig>
     return configs.filter((c) => !c.disabled && c.refreshToken)
   } catch {
@@ -63,7 +63,6 @@ export async function saveKiroAuth(
 export async function clearKiroAuth(): Promise<void> {
   try {
     await unlink(getKiroAuthPath())
-    authState = null
   } catch {
     // File doesn't exist, ignore
   }

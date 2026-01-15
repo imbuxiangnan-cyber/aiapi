@@ -105,6 +105,16 @@ bun run start
 
 认证成功后，Token 会保存到本地，下次启动无需重新认证。
 
+#### 企业/商业账户
+
+```bash
+# Business 计划
+aiapi start --account-type business
+
+# Enterprise 计划
+aiapi start --account-type enterprise
+```
+
 #### 可用模型
 
 | 模型 | ID | 上下文长度 |
@@ -434,25 +444,113 @@ addPlatformMapping("kiro", "claude-sonnet-4-5", {
 
 ## 代理配置
 
-如果你需要通过代理访问网络：
+如果你需要通过代理访问网络，有两种配置方式：
+
+### 方式一：持久化配置（推荐）
+
+配置一次，永久生效，下次启动自动使用。
+
+```bash
+# 交互式配置
+aiapi proxy --set
+
+# 或直接设置
+aiapi proxy --http-proxy http://127.0.0.1:7890
+
+# 同时设置 HTTP 和 HTTPS 代理
+aiapi proxy --http-proxy http://127.0.0.1:7890 --https-proxy http://127.0.0.1:7890
+```
+
+#### 代理管理命令
+
+```bash
+# 查看当前代理配置
+aiapi proxy
+
+# 启用代理
+aiapi proxy --enable
+
+# 禁用代理（保留设置）
+aiapi proxy --disable
+
+# 清除代理配置
+aiapi proxy --clear
+```
+
+#### 示例：配置 Clash 代理
+
+```bash
+# Clash 默认端口 7890
+aiapi proxy --http-proxy http://127.0.0.1:7890
+
+# 验证配置
+aiapi proxy
+# 输出：
+# Current proxy configuration:
+#   Status: ✅ Enabled
+#   HTTP_PROXY: http://127.0.0.1:7890
+#   HTTPS_PROXY: http://127.0.0.1:7890
+```
+
+### 方式二：环境变量（临时）
+
+仅当次启动生效：
 
 ```bash
 # Windows PowerShell
 $env:HTTP_PROXY = "http://127.0.0.1:7890"
 $env:HTTPS_PROXY = "http://127.0.0.1:7890"
-bun run start
+aiapi start --proxy-env
 
 # Windows CMD
 set HTTP_PROXY=http://127.0.0.1:7890
 set HTTPS_PROXY=http://127.0.0.1:7890
-bun run start
+aiapi start --proxy-env
+
+# Linux/macOS
+export HTTP_PROXY=http://127.0.0.1:7890
+export HTTPS_PROXY=http://127.0.0.1:7890
+aiapi start --proxy-env
 ```
+
+### 代理配置优先级
+
+1. `--proxy-env` 参数（从环境变量读取）
+2. 持久化配置（`proxy --set` 设置的）
+3. 无代理
 
 ---
 
 ## Claude Code 集成
 
 [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) 是 Anthropic 的 AI 编程助手。
+
+### 自动配置（推荐）
+
+```bash
+# 使用 GitHub Copilot 作为后端
+aiapi start --claude-code
+
+# 使用 OpenCode Zen 作为后端
+aiapi start --zen --claude-code
+
+# 使用 Google Antigravity 作为后端
+aiapi start --antigravity --claude-code
+
+# 使用 AWS Kiro 作为后端
+aiapi start --kiro --claude-code
+
+# 使用 Factory AI Droids 作为后端
+aiapi start --droids --claude-code
+```
+
+运行后：
+1. 选择主模型（用于代码生成）
+2. 选择快速模型（用于后台任务）
+3. 启动命令会自动复制到剪贴板
+4. **打开新终端**，粘贴并运行命令启动 Claude Code
+
+### 手动配置
 
 在项目根目录创建 `.claude/settings.json`：
 
@@ -468,7 +566,7 @@ bun run start
 }
 ```
 
-然后启动服务器后，在该项目目录运行 `claude` 命令。
+然后启动 aiapi 服务器后，在该项目目录运行 `claude` 命令。
 
 ---
 
@@ -533,6 +631,14 @@ bun run start
 | `/kiro/v1/*` | AWS Kiro 专用 |
 | `/droids/v1/*` | Factory AI Droids 专用 |
 
+### 监控端点
+
+| 端点 | 方法 | 说明 |
+| ---- | ---- | ---- |
+| `/usage` | GET | 使用量统计（仅 Copilot） |
+| `/token` | GET | 当前 Token 信息 |
+| `/token-pool` | GET | Token 池状态 |
+
 ### 调用示例
 
 ```bash
@@ -577,13 +683,66 @@ curl http://localhost:4141/v1/messages \
 | ---- | ---- | ---- | ---- |
 | `--port` | `-p` | 4141 | 监听端口 |
 | `--verbose` | `-v` | false | 详细日志 |
-| `--account-type` | `-a` | individual | 账户类型 |
+| `--account-type` | `-a` | individual | 账户类型 (individual/business/enterprise) |
 | `--claude-code` | `-c` | false | 生成 Claude Code 启动命令 |
 | `--zen` | `-z` | false | 启用 OpenCode Zen 模式 |
+| `--zen-api-key` | - | - | Zen API Key |
 | `--antigravity` | - | false | 启用 Google Antigravity 模式 |
+| `--antigravity-client-id` | - | - | Antigravity OAuth Client ID |
+| `--antigravity-client-secret` | - | - | Antigravity OAuth Client Secret |
 | `--kiro` | `-k` | false | 启用 AWS Kiro 模式 |
 | `--droids` | `-d` | false | 启用 Factory AI Droids 模式 |
 | `--rate-limit` | `-r` | - | 请求间隔（秒） |
+| `--wait` | `-w` | false | 达到限制时等待而非报错 |
+| `--manual` | - | false | 手动审批每个请求 |
+| `--github-token` | `-g` | - | 直接提供 GitHub Token |
+| `--show-token` | - | false | 显示 Token 信息 |
+| `--proxy-env` | - | false | 从环境变量读取代理 |
+
+### proxy 命令参数
+
+| 参数 | 说明 |
+| ---- | ---- |
+| `--set` | 交互式配置代理 |
+| `--enable` | 启用已保存的代理 |
+| `--disable` | 禁用代理（保留设置） |
+| `--clear` | 清除代理配置 |
+| `--show` | 显示当前配置 |
+| `--http-proxy` | HTTP 代理 URL |
+| `--https-proxy` | HTTPS 代理 URL |
+| `--no-proxy` | 不走代理的主机列表 |
+
+### logout 命令参数
+
+| 参数 | 别名 | 说明 |
+| ---- | ---- | ---- |
+| `--github` | `-g` | 仅清除 GitHub Copilot 凭证 |
+| `--zen` | `-z` | 仅清除 Zen 凭证 |
+| `--antigravity` | - | 仅清除 Antigravity 凭证 |
+| `--kiro` | `-k` | 仅清除 Kiro 凭证 |
+| `--droids` | `-d` | 仅清除 Droids 凭证 |
+| `--all` | `-a` | 清除所有凭证 |
+
+> **提示**：不带参数运行 `logout` 会显示交互式菜单供选择。
+
+### antigravity 子命令
+
+管理 Google Antigravity 账户：
+
+| 子命令 | 说明 |
+| ---- | ---- |
+| `add` | 添加新的 Antigravity 账户（OAuth 登录） |
+| `list` | 列出所有已配置的账户及其状态 |
+| `remove <index>` | 按索引删除指定账户 |
+| `clear` | 清除所有 Antigravity 账户（需确认） |
+
+```bash
+# 示例
+aiapi antigravity add      # 添加账户
+aiapi antigravity list     # 列出账户
+aiapi antigravity remove 0 # 删除索引为 0 的账户
+aiapi antigravity clear    # 清除所有账户
+```
 
 ---
 
@@ -614,7 +773,19 @@ services:
       - "4141:4141"
     volumes:
       - ./data:/root/.local/share/aiapi
+    environment:
+      - GH_TOKEN=your_github_token  # 可选
     restart: unless-stopped
+```
+
+### 使用代理
+
+```bash
+docker run -p 4141:4141 \
+  -e HTTP_PROXY=http://host.docker.internal:7890 \
+  -e HTTPS_PROXY=http://host.docker.internal:7890 \
+  -v ./data:/root/.local/share/aiapi \
+  aiapi start --proxy-env
 ```
 
 ---
@@ -634,11 +805,104 @@ services:
 | `droids-auth.json` | Droids API Key |
 | `config.json` | 代理等配置 |
 
+### 切换账户
+
+```bash
+# 交互式选择要清除的凭证
+aiapi logout
+
+# 仅清除 GitHub Copilot 凭证
+aiapi logout --github
+# 或简写
+aiapi logout -g
+
+# 清除 Zen 凭证
+aiapi logout --zen
+
+# 清除 Antigravity 凭证
+aiapi logout --antigravity
+
+# 清除 Kiro 凭证
+aiapi logout --kiro
+
+# 清除 Droids 凭证
+aiapi logout --droids
+
+# 清除所有凭证
+aiapi logout --all
+```
+
+### 查看使用量
+
+```bash
+# 命令行查看（仅 Copilot）
+aiapi check-usage
+```
+
+启动服务器后，也可以访问监控端点：
+
+```bash
+# 使用量统计
+curl http://localhost:4141/usage
+
+# Token 信息
+curl http://localhost:4141/token
+
+# Token 池状态
+curl http://localhost:4141/token-pool
+```
+
+### 调试问题
+
+```bash
+# 显示调试信息
+aiapi debug
+
+# JSON 格式输出
+aiapi debug --json
+
+# 启用详细日志
+aiapi start --verbose
+```
+
+### 速率限制
+
+避免触发平台的滥用检测：
+
+```bash
+# 设置请求间隔 30 秒
+aiapi start --rate-limit 30
+
+# 达到限制时等待而非报错
+aiapi start --rate-limit 30 --wait
+
+# 手动审批每个请求
+aiapi start --manual
+```
+
+### 企业/商业账户
+
+GitHub Copilot Business 或 Enterprise 用户：
+
+```bash
+# Business 计划
+aiapi start --account-type business
+
+# Enterprise 计划
+aiapi start --account-type enterprise
+```
+
 ---
 
 ## 免责声明
 
-> **警告**：这是 GitHub Copilot API 的逆向工程代理。**不受 GitHub 官方支持**，可能随时失效。使用风险自负。
+> **警告**：这是多平台 API 的逆向工程代理。**不受官方支持**，可能随时失效。使用风险自负。
+
+> **安全提示**：过度的自动化或脚本化使用可能触发平台的滥用检测系统，导致访问被暂停。请负责任地使用。
+>
+> 相关政策：
+> - [GitHub 可接受使用政策](https://docs.github.com/site-policy/acceptable-use-policies/github-acceptable-use-policies)
+> - [GitHub Copilot 条款](https://docs.github.com/site-policy/github-terms/github-terms-for-additional-products-and-features#github-copilot)
 
 ---
 

@@ -18,7 +18,7 @@ export function getDroidsAuthPath(): string {
 
 export async function loadDroidsAuth(): Promise<DroidsAuthConfig | null> {
   try {
-    const content = await readFile(getDroidsAuthPath(), "utf-8")
+    const content = await readFile(getDroidsAuthPath(), "utf8")
     return JSON.parse(content) as DroidsAuthConfig
   } catch {
     return null

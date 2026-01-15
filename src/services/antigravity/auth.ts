@@ -113,7 +113,7 @@ export async function saveAntigravityAuth(
   await ensurePaths()
   const authPath = getAntigravityAuthPath()
   const fs = await import("node:fs/promises")
-  await fs.writeFile(authPath, JSON.stringify(auth, null, 2), "utf-8")
+  await fs.writeFile(authPath, JSON.stringify(auth, null, 2), "utf8")
   consola.success("Antigravity accounts saved to", authPath)
 }
 

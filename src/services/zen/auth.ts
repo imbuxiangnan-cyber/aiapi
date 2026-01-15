@@ -29,7 +29,7 @@ export async function saveZenAuth(auth: ZenAuth): Promise<void> {
   await ensurePaths()
   const authPath = getZenAuthPath()
   const fs = await import("node:fs/promises")
-  await fs.writeFile(authPath, JSON.stringify(auth, null, 2), "utf-8")
+  await fs.writeFile(authPath, JSON.stringify(auth, null, 2), "utf8")
   consola.success("Zen API key saved to", authPath)
 }
 

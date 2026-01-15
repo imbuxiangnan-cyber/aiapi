@@ -1,5 +1,4 @@
 import { CODE_WHISPERER_URL } from "./auth"
-import { mapModelToInternal } from "./models"
 import { kiroTokenManager } from "./token-manager"
 
 export interface KiroMessage {
@@ -19,7 +18,8 @@ export async function createKiroChatCompletion(
   request: KiroChatRequest,
 ): Promise<Response> {
   const token = await kiroTokenManager.getToken()
-  const internalModel = mapModelToInternal(request.model)
+  // Note: Model mapping is handled by the routes layer
+  // mapModelToInternal(request.model) is available if needed
 
   // Convert to CodeWhisperer format
   const cwRequest = {
