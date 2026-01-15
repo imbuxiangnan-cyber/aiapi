@@ -1,0 +1,76 @@
+{
+  "name": "aiapi-server",
+  "version": "1.0.1",
+  "description": "Multi-platform AI API proxy server. Supports GitHub Copilot, OpenCode Zen, Google Antigravity, AWS Kiro, and Factory AI Droids with OpenAI/Anthropic compatible API.",
+  "keywords": [
+    "proxy",
+    "github-copilot",
+    "openai-compatible",
+    "anthropic-compatible",
+    "opencode-zen",
+    "google-antigravity",
+    "aws-kiro",
+    "factory-droids",
+    "claude-code",
+    "multi-platform"
+  ],
+  "homepage": "https://github.com/imbuxiangnan-cyber/aiapi",
+  "bugs": "https://github.com/imbuxiangnan-cyber/aiapi/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imbuxiangnan-cyber/aiapi.git"
+  },
+  "author": "imbuxiangnan-cyber",
+  "type": "module",
+  "bin": {
+    "aiapi": "dist/main.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "bun run --watch ./src/main.ts start",
+    "knip": "knip-bun",
+    "lint": "eslint --cache",
+    "lint:all": "eslint --cache .",
+    "prepack": "bun run build",
+    "prepare": "simple-git-hooks",
+    "release": "bumpp && bun publish --access public",
+    "start": "NODE_ENV=production bun run ./src/main.ts",
+    "typecheck": "tsc"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "bunx lint-staged"
+  },
+  "lint-staged": {
+    "*": "bun run lint --fix"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.11.0",
+    "citty": "^0.1.6",
+    "clipboardy": "^5.0.0",
+    "consola": "^3.4.2",
+    "fetch-event-stream": "^0.1.5",
+    "gpt-tokenizer": "^3.0.1",
+    "hono": "^4.9.9",
+    "proxy-from-env": "^1.1.0",
+    "srvx": "^0.8.9",
+    "tiny-invariant": "^1.3.3",
+    "undici": "^7.16.0",
+    "zod": "^4.1.11"
+  },
+  "devDependencies": {
+    "@echristian/eslint-config": "^0.0.54",
+    "@types/bun": "^1.2.23",
+    "@types/proxy-from-env": "^1.0.4",
+    "bumpp": "^10.2.3",
+    "eslint": "^9.37.0",
+    "knip": "^5.64.1",
+    "lint-staged": "^16.2.3",
+    "prettier-plugin-packagejson": "^2.5.19",
+    "simple-git-hooks": "^2.13.1",
+    "tsdown": "^0.15.6",
+    "typescript": "^5.9.3"
+  }
+}

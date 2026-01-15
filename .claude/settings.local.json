@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init:*)",
+      "Bash(git remote add:*)",
+      "Bash(git clone:*)",
+      "Bash(bun install)",
+      "Bash(bun run:*)",
+      "Bash(dir:*)",
+      "Bash(cd:*)",
+      "Bash(npm run build)",
+      "Bash(npm publish:*)",
+      "Bash(npm version:*)",
+      "Bash(npm pkg fix:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
