@@ -49,7 +49,7 @@ export async function loadZenAuth(): Promise<ZenAuth | null> {
     }
 
     const content = await fs.readFile(authPath)
-    return JSON.parse(content) as ZenAuth
+    return JSON.parse(content.toString()) as ZenAuth
   } catch {
     return null
   }

@@ -133,7 +133,7 @@ export async function loadAntigravityAuth(): Promise<AntigravityAuth | null> {
     }
 
     const content = await fs.readFile(authPath)
-    const data = JSON.parse(content)
+    const data = JSON.parse(content.toString())
 
     // Handle both array format (legacy) and object format
     if (Array.isArray(data)) {
