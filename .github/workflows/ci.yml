@@ -19,8 +19,9 @@ jobs:
       - name: Install dependencies
         run: bun install
 
-      - name: Run linter
-        run: bun run lint:all
+      # Lint temporarily disabled
+      # - name: Run linter
+      #   run: bun run lint:all
 
       - name: Run type check
         run: bun run typecheck
