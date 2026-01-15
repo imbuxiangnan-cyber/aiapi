@@ -899,10 +899,6 @@ aiapi start --account-type enterprise
 > **警告**：这是多平台 API 的逆向工程代理。**不受官方支持**，可能随时失效。使用风险自负。
 
 > **安全提示**：过度的自动化或脚本化使用可能触发平台的滥用检测系统，导致访问被暂停。请负责任地使用。
->
-> 相关政策：
-> - [GitHub 可接受使用政策](https://docs.github.com/site-policy/acceptable-use-policies/github-acceptable-use-policies)
-> - [GitHub Copilot 条款](https://docs.github.com/site-policy/github-terms/github-terms-for-additional-products-and-features#github-copilot)
 
 ---
 
