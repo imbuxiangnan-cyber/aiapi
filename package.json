@@ -1,6 +1,6 @@
 {
   "name": "aiapi-server",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Multi-platform AI API proxy server. Supports GitHub Copilot, OpenCode Zen, Google Antigravity, AWS Kiro, and Factory AI Droids with OpenAI/Anthropic compatible API.",
   "keywords": [
     "proxy",
@@ -35,7 +35,7 @@
     "lint": "eslint --cache",
     "lint:all": "eslint --cache .",
     "prepack": "bun run build",
-    "prepare": "simple-git-hooks",
+    "prepare": "bunx simple-git-hooks",
     "release": "bumpp && bun publish --access public",
     "start": "NODE_ENV=production bun run ./src/main.ts",
     "typecheck": "tsc"
