@@ -1,5 +1,5 @@
 
-你们怎么啥都能找到啊，这个项目停止更新了，只专注这个项目了:https://github.com/imbuxiangnan-cyber/copilot-api-plus**给这个项目点赞吧**
+你们怎么啥都能找到啊，这个项目停止更新了，只专注这个项目了:[copilot-api-plus](https://github.com/imbuxiangnan-cyber/copilot-api-plus)，给这个项目点赞吧。
 # AIAPI
 
 AI API 代理服务器，将 GitHub Copilot、OpenCode Zen、Google Antigravity、AWS Kiro、Factory AI Droids 等 AI 服务转换为 **OpenAI** 和 **Anthropic** 兼容 API，支持与 [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview)、[opencode](https://github.com/sst/opencode) 等工具无缝集成。
